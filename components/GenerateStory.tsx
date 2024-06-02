@@ -1,9 +1,18 @@
 "use client";
 
 import { useChat } from "ai/react";
+import { addNewStoryToDB } from "@/server/story/actions";
 
 export default function GenerateStory() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
+
+  const handleSaveStoryToDatabase = async (formData: FormData) => {
+    const title = formData.get("title") as string;
+    await addNewStoryToDB(
+      title,
+      messages.map((message) => message.content).join(""),
+    );
+  };
 
   return (
     <div className="stretch mx-auto flex w-full max-w-md flex-col py-24">
@@ -13,6 +22,21 @@ export default function GenerateStory() {
           {message.content}
         </div>
       ))}
+      <form
+        className={
+          "absolute right-10 top-[50%] flex -translate-y-1/2 transform flex-col"
+        }
+        action={handleSaveStoryToDatabase}
+      >
+        <input
+          type="text"
+          title={"Title"}
+          name={"title"}
+          placeholder="Title"
+          className={"border-2"}
+        />
+        <button type={"submit"}>save to database</button>
+      </form>
 
       <form onSubmit={handleSubmit}>
         <input

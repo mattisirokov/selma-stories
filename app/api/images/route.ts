@@ -5,7 +5,7 @@ const openai = new OpenAI(process.env.OPENAI_API_KEY as any);
 
 export async function POST(req: NextRequest) {
   const prompt =
-    "A young blonde girl with bright blue eyes, large cheeks, standing on the moon, looking at a distant figure approaching.";
+    "A young blonde girl with bright blue eyes, large cheeks, standing on the moon's surface, looking around at the grey sand and large craters.";
 
   try {
     const response = await openai.images.generate({
