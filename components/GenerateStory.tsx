@@ -2,7 +2,7 @@
 
 import { useChat } from "ai/react";
 
-export default function Chat() {
+export default function GenerateStory() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
 
   return (
@@ -16,9 +16,9 @@ export default function Chat() {
 
       <form onSubmit={handleSubmit}>
         <input
-          className="fixed bottom-24 mb-8 w-full max-w-md rounded border border-gray-300 p-2 shadow-xl"
+          className="fixed bottom-12 mb-8 w-full max-w-md rounded border border-gray-300 p-2 shadow-xl"
           value={input}
-          placeholder="Say something..."
+          placeholder="Let's make a story..."
           onChange={handleInputChange}
         />
       </form>
