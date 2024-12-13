@@ -1,0 +1,35 @@
+export type StoryTheme =
+  | "adventure"
+  | "fantasy"
+  | "educational"
+  | "moral"
+  | "bedtime";
+
+export type ArtStyle =
+  | "watercolor"
+  | "cartoon"
+  | "realistic"
+  | "digital"
+  | "pencil";
+
+export type StoryLength = "short" | "medium" | "long";
+
+export type Language = "English" | "Finnish";
+
+export interface StoryParams {
+  title: string;
+  theme: StoryTheme;
+  mainCharacter: string;
+  setting: string;
+  targetAge: number;
+  moral: string;
+  length: StoryLength;
+  language: Language;
+}
+
+export interface ImageParams {
+  artStyle: ArtStyle;
+  colorScheme: string;
+  mood: string;
+  focusElement: string;
+}
