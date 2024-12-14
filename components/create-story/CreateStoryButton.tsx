@@ -17,10 +17,10 @@ export default function CreateStoryButton() {
               theme: "adventure",
               mainCharacter: "Selma and Matti, two young friends",
               setting: "a far away desert with a lot of sand",
-              targetAge: 5,
+              targetAge: 5, // they can all be 5
               moral: "It's always good to learn TypeScript",
-              length: "medium",
-              language: "Finnish",
+              length: "medium", // they can all be medium
+              language: "Finnish", // they can all be Finnish
             },
             {
               artStyle: "watercolor",

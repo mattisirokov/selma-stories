@@ -9,7 +9,7 @@ import Colors from "@/constants/Colors";
 import StoryCard from "@/components/my-stories/StoryCard";
 import { Story } from "@/types";
 
-export default function TabTwoScreen() {
+export default function MyStoriesScreen() {
   const [stories, setStories] = useState<Story[]>([]);
 
   const { getStories } = useAIStory();

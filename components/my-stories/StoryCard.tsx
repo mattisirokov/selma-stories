@@ -37,8 +37,6 @@ export default function StoryCard({
 
 const styles = StyleSheet.create({
   card: {
-    borderBottomWidth: 1,
-    borderColor: Colors.light.text,
     marginBottom: 16,
   },
   cardImg: {

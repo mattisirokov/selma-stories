@@ -7,5 +7,6 @@ export default {
     tint: tintColorLight,
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorLight,
+    inputBorder: "#ccc",
   },
 };

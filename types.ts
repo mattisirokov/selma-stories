@@ -16,6 +16,17 @@ export type StoryLength = "short" | "medium" | "long";
 
 export type Language = "English" | "Finnish";
 
+export interface FormState {
+  title: string;
+  mainCharacter: string;
+  mainCharacterTraits: string[];
+  theme: string[];
+  moral: string;
+  setting: string;
+  amountOfImages: number;
+  imageStyle: string[];
+}
+
 export interface StoryParams {
   title: string;
   theme: StoryTheme;
