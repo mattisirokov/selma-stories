@@ -4,11 +4,12 @@ import {
   View,
   TouchableOpacity,
   SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 import Animated, { FadeInDown } from "react-native-reanimated";
 import Colors from "@/constants/Colors";
-import React from "react";
 
 type CreateStoryStepProps = {
   step: number;
@@ -33,53 +34,57 @@ export default function CreateStoryStep({
 }: CreateStoryStepProps): JSX.Element {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Animated.View
-          style={styles.header}
-          entering={FadeInDown.delay(200).springify()}
-        >
-          <Text style={styles.stepIndicator}>Step {step}</Text>
-          <Text style={styles.title}>
-            {title.split(" ").map((word, index) => {
-              if (highlightedText && word === highlightedText) {
-                return (
-                  <Text key={index} style={styles.highlightedText}>
-                    {word}{" "}
-                  </Text>
-                );
-              }
-              return word + " ";
-            })}
-          </Text>
-          <Text style={styles.helpText}>{helpText}</Text>
-        </Animated.View>
-
-        <Animated.View
-          style={styles.content}
-          entering={FadeInDown.delay(400).springify()}
-        >
-          <View style={styles.childrenContainer}>{children}</View>
-        </Animated.View>
-
-        <Animated.View
-          style={styles.buttonContainer}
-          entering={FadeInDown.delay(600).springify()}
-        >
-          <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
-            <Text style={styles.backButtonText}>Back</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={
-              disabledNextButton ? styles.disabledNextButton : styles.nextButton
-            }
-            onPress={onPress}
-            disabled={disabledNextButton}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Animated.View
+            style={styles.header}
+            entering={FadeInDown.delay(200).springify()}
           >
-            <Text style={styles.nextButtonText}>Next</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
+            <Text style={styles.stepIndicator}>Step {step}</Text>
+            <Text style={styles.title}>
+              {title.split(" ").map((word, index) => {
+                if (highlightedText && word === highlightedText) {
+                  return (
+                    <Text key={index} style={styles.highlightedText}>
+                      {word}{" "}
+                    </Text>
+                  );
+                }
+                return word + " ";
+              })}
+            </Text>
+            <Text style={styles.helpText}>{helpText}</Text>
+          </Animated.View>
+
+          <Animated.View
+            style={styles.content}
+            entering={FadeInDown.delay(400).springify()}
+          >
+            <View style={styles.childrenContainer}>{children}</View>
+          </Animated.View>
+
+          <Animated.View
+            style={styles.buttonContainer}
+            entering={FadeInDown.delay(600).springify()}
+          >
+            <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
+              <Text style={styles.backButtonText}>Back</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={
+                disabledNextButton
+                  ? styles.disabledNextButton
+                  : styles.nextButton
+              }
+              onPress={onPress}
+              disabled={disabledNextButton}
+            >
+              <Text style={styles.nextButtonText}>Next</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
