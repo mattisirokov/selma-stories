@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { StyleSheet } from "react-native";
-
+import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
-
-import CreatedStoriesList from "@/components/my-stories/CreatedStoriesList";
 
 import { useAIStory } from "@/hooks/useAIStory";
 
+import Colors from "@/constants/Colors";
+
+import StoryCard from "@/components/my-stories/StoryCard";
 import { Story } from "@/types";
 
 export default function TabTwoScreen() {
@@ -16,35 +16,45 @@ export default function TabTwoScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    getStories().then((stories) => setStories(stories));
+    getStories().then((stories) => {
+      if (stories) {
+        setStories(stories);
+      }
+    });
   }, []);
 
+  const handleStoryClick = (storyId: number) => {
+    router.push(`/story/${storyId}`);
+  };
+
+  const sortedByDate = stories.sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
   return (
-    <CreatedStoriesList
-      stories={stories}
-      onItemClick={(storyId) => router.push(`/story/${storyId}`)}
-    />
+    <SafeAreaView style={{ backgroundColor: Colors.light.background }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Created stories</Text>
+        {sortedByDate.map((story, index) => (
+          <StoryCard
+            key={story.id || index}
+            story={story}
+            onItemClick={handleStoryClick}
+          />
+        ))}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 24,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-  image: {
-    width: 200,
-    height: 200,
-    borderWidth: 1,
+    fontSize: 32,
+    fontWeight: "700",
+    color: Colors.light.text,
+    marginBottom: 12,
   },
 });

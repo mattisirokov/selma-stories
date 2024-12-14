@@ -1,4 +1,3 @@
-import React from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -8,6 +7,8 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+
+import Colors from "@/constants/Colors";
 import FeatherIcon from "@expo/vector-icons/Feather";
 
 export default function HomeLayout({
@@ -19,11 +20,7 @@ export default function HomeLayout({
     <SafeAreaView style={styles.container}>
       <View style={styles.top}>
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => {
-              // handle onPress
-            }}
-          >
+          <TouchableOpacity onPress={() => {}}>
             <Image
               alt=""
               source={{
@@ -33,12 +30,8 @@ export default function HomeLayout({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              // handle onPress
-            }}
-          >
-            <FeatherIcon color="#1a2525" name="bell" size={24} />
+          <TouchableOpacity onPress={() => {}}>
+            <FeatherIcon color={Colors.light.text} name="bell" size={24} />
           </TouchableOpacity>
         </View>
         <View style={styles.greeting}>
@@ -54,7 +47,11 @@ export default function HomeLayout({
           <View style={styles.searchFloating}>
             <TouchableOpacity>
               <View style={styles.searchButton}>
-                <FeatherIcon name="search" size={20} color="white" />
+                <FeatherIcon
+                  name="search"
+                  size={20}
+                  color={Colors.light.text}
+                />
               </View>
             </TouchableOpacity>
           </View>
@@ -62,9 +59,9 @@ export default function HomeLayout({
       </View>
       <View style={styles.content}>
         <View style={styles.contentHeader}>
-          <Text style={styles.contentTitle}>Courses</Text>
+          <Text style={styles.contentTitle}>Created stories</Text>
           <TouchableOpacity>
-            <Text style={styles.contentLink}>See all</Text>
+            <Text style={styles.contentLink}>Create a story</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.contentPlaceholder}>{children}</View>
@@ -75,7 +72,7 @@ export default function HomeLayout({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffffff",
+    backgroundColor: Colors.light.background,
     flex: 1,
   },
   top: {
@@ -102,12 +99,12 @@ const styles = StyleSheet.create({
   greetingTitle: {
     fontSize: 32,
     fontWeight: "800",
-    color: "#1a2525",
+    color: Colors.light.text,
   },
   greetingText: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#1a2525",
+    color: Colors.light.text,
     marginTop: 8,
   },
   /** Search */
@@ -118,7 +115,7 @@ const styles = StyleSheet.create({
     height: 56,
     backgroundColor: "#f3f3f6",
     paddingHorizontal: 16,
-    color: "#1a2525",
+    color: Colors.light.text,
     fontSize: 18,
     borderRadius: 9999,
   },
@@ -136,7 +133,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 9999,
-    backgroundColor: "#5bd2bc",
+    backgroundColor: Colors.light.tint,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -155,17 +152,17 @@ const styles = StyleSheet.create({
   contentTitle: {
     fontSize: 22,
     fontWeight: "800",
-    color: "#1a2525",
+    color: Colors.light.text,
   },
   contentLink: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#1a2525",
+    color: Colors.light.text,
   },
   contentPlaceholder: {
     borderStyle: "dashed",
     borderWidth: 4,
-    borderColor: "#e5e7eb",
+    borderColor: "#bada55",
     flex: 1,
     borderRadius: 8,
   },

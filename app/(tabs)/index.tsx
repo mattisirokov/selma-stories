@@ -1,30 +1,16 @@
-import { StyleSheet } from "react-native";
-
-import { Text, View } from "@/components/Themed";
-import CreateStoryButton from "@/components/create-story/CreateStoryButton";
+import { Text, StyleSheet } from "react-native";
 import HomeLayout from "@/components/home/HomeLayout";
 
 export default function TabOneScreen() {
   return (
     <HomeLayout>
-      <CreateStoryButton />
+      <Text style={styles.text}>Welcome to the home page</Text>
     </HomeLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  text: {
+    color: "black",
   },
 });

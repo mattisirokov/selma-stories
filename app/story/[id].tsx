@@ -13,18 +13,18 @@ import {
 } from "react-native";
 
 import { useLocalSearchParams, useRouter } from "expo-router";
-import FeatherIcon from "@expo/vector-icons/Feather";
-
 import { useAIStory } from "@/hooks/useAIStory";
 
-import { formatDate } from "@/helpers";
+import FeatherIcon from "@expo/vector-icons/Feather";
+import Colors from "@/constants/Colors";
 
+import { formatDate } from "@/helpers";
 import { Story } from "@/types";
 
 const HEADER_OFFSET = 100;
 const HEADER_BACKGROUND = {
-  default: "rgba(255,255,255,0)",
-  scroll: "rgba(255,255,255,1)",
+  default: "rgba(0,0,0,0)",
+  scroll: "rgba(0,0,0,1)",
 };
 
 export default function Example() {
@@ -55,11 +55,11 @@ export default function Example() {
   });
 
   if (!storyData) {
-    return <Text>Loading...</Text>;
+    return <Text style={{ color: Colors.light.text }}>Loading...</Text>;
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: Colors.light.background }}>
       <Animated.View style={[styles.actions, { backgroundColor }]}>
         <SafeAreaView>
           <View style={styles.actionWrapper}>
@@ -70,19 +70,27 @@ export default function Example() {
               style={{ marginRight: "auto" }}
             >
               <View style={[styles.action, styles.actionFilled]}>
-                <FeatherIcon color="#323142" name="chevron-left" size={22} />
+                <FeatherIcon
+                  color={Colors.light.text}
+                  name="chevron-left"
+                  size={22}
+                />
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => {}}>
               <View style={styles.action}>
-                <FeatherIcon color="#323142" name="share" size={22} />
+                <FeatherIcon color={Colors.light.text} name="share" size={22} />
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => {}}>
               <View style={styles.action}>
-                <FeatherIcon color="#323142" name="search" size={22} />
+                <FeatherIcon
+                  color={Colors.light.text}
+                  name="search"
+                  size={22}
+                />
               </View>
             </TouchableOpacity>
           </View>
@@ -120,9 +128,13 @@ export default function Example() {
             <Text style={styles.heroStatusText}>Opened</Text>
           </View>
         </View>
-        <View style={styles.header}>
+        <View
+          style={[styles.header, { backgroundColor: Colors.light.background }]}
+        >
           <View style={styles.headerTop}>
-            <Text style={styles.title}>{storyData.title}</Text>
+            <Text style={[styles.title, { color: Colors.light.text }]}>
+              {storyData.title}
+            </Text>
 
             <TouchableOpacity
               onPress={() => {
@@ -130,14 +142,16 @@ export default function Example() {
               }}
               style={styles.headerTopAction}
             >
-              <FeatherIcon color="#323142" name="heart" size={22} />
+              <FeatherIcon color={Colors.light.text} name="heart" size={22} />
             </TouchableOpacity>
           </View>
 
           <View style={styles.headerLocation}>
             <FeatherIcon color="#FF9801" name="map-pin" size={14} />
 
-            <Text style={styles.headerLocationText}>
+            <Text
+              style={[styles.headerLocationText, { color: Colors.light.text }]}
+            >
               {formatDate(storyData.created_at)}
             </Text>
           </View>
@@ -146,7 +160,11 @@ export default function Example() {
             {(() => {
               if (!storyData.image_urls || storyData.image_urls.length === 0) {
                 return (
-                  <Text style={styles.storyText}>{storyData.content}</Text>
+                  <Text
+                    style={[styles.storyText, { color: Colors.light.text }]}
+                  >
+                    {storyData.content}
+                  </Text>
                 );
               } else if (storyData.image_urls.length >= 2) {
                 const midPoint = Math.floor(storyData.content.length / 2);
@@ -158,14 +176,18 @@ export default function Example() {
 
                 return (
                   <>
-                    <Text style={styles.storyText}>
+                    <Text
+                      style={[styles.storyText, { color: Colors.light.text }]}
+                    >
                       {storyData.content.substring(0, splitPoint)}
                     </Text>
                     <Image
                       source={{ uri: storyData.image_urls[0] }}
                       style={styles.storyImage}
                     />
-                    <Text style={styles.storyText}>
+                    <Text
+                      style={[styles.storyText, { color: Colors.light.text }]}
+                    >
                       {storyData.content.substring(splitPoint)}
                     </Text>
                     <Image
@@ -184,14 +206,18 @@ export default function Example() {
 
                 return (
                   <>
-                    <Text style={styles.storyText}>
+                    <Text
+                      style={[styles.storyText, { color: Colors.light.text }]}
+                    >
                       {storyData.content.substring(0, splitPoint)}
                     </Text>
                     <Image
                       source={{ uri: storyData.image_urls[0] }}
                       style={styles.storyImage}
                     />
-                    <Text style={styles.storyText}>
+                    <Text
+                      style={[styles.storyText, { color: Colors.light.text }]}
+                    >
                       {storyData.content.substring(splitPoint)}
                     </Text>
                   </>
@@ -215,14 +241,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   container: {
-    backgroundColor: "#F4F5F6",
+    backgroundColor: Colors.light.background,
   },
   title: {
     fontSize: 32,
     fontWeight: "600",
     lineHeight: 38,
     letterSpacing: -0.015,
-    color: "#323142",
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0,
@@ -235,6 +260,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Colors.light.background,
   },
   actionWrapper: {
     flexDirection: "row",
@@ -244,7 +270,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   actionFilled: {
-    backgroundColor: "#e8f0f9",
+    backgroundColor: Colors.light.background,
   },
   hero: {
     position: "relative",
@@ -267,12 +293,11 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     fontWeight: "600",
     letterSpacing: 0.1,
-    color: "#ffffff",
+    color: Colors.light.text,
   },
   header: {
     paddingVertical: 16,
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
   },
@@ -287,7 +312,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginLeft: 12,
-    backgroundColor: "#f1f3f4",
+    backgroundColor: Colors.light.tint,
     borderRadius: 9999,
   },
   headerLocation: {
@@ -298,7 +323,6 @@ const styles = StyleSheet.create({
   headerLocationText: {
     fontSize: 14,
     lineHeight: 20,
-    color: "#323142",
     opacity: 0.7,
     marginLeft: 4,
   },
@@ -308,7 +332,6 @@ const styles = StyleSheet.create({
   storyText: {
     fontSize: 16,
     lineHeight: 24,
-    color: "#323142",
     marginBottom: 20,
   },
   storyImage: {
