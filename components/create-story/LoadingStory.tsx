@@ -6,13 +6,11 @@ import Colors from "@/constants/Colors";
 interface LoadingStoryProps {
   storyLoadingState: "idle" | "loading" | "success" | "error";
   imagesLoadingState: "idle" | "loading" | "success" | "error";
-  onResetPress: () => void;
 }
 
 export default function LoadingStory({
   storyLoadingState,
   imagesLoadingState,
-  onResetPress,
 }: LoadingStoryProps) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const textFadeAnim = useRef(new Animated.Value(1)).current;
@@ -84,7 +82,6 @@ export default function LoadingStory({
           duration: 500,
           useNativeDriver: true,
         }).start(() => {
-          onResetPress();
           router.push("/");
         });
       }, 1500);
@@ -100,7 +97,6 @@ export default function LoadingStory({
           duration: 500,
           useNativeDriver: true,
         }).start(() => {
-          onResetPress();
           router.push("/");
         });
       }, 2000);
@@ -116,7 +112,6 @@ export default function LoadingStory({
         <TouchableOpacity
           style={styles.nextButton}
           onPress={() => {
-            onResetPress();
             router.push("/my-stories");
           }}
         >
