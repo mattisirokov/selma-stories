@@ -1,19 +1,29 @@
+import { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
-import { Text, View } from "@/components/Themed";
+import { useRouter } from "expo-router";
+
+import CreatedStoriesList from "@/components/my-stories/CreatedStoriesList";
+
+import { useAIStory } from "@/hooks/useAIStory";
+
+import { Story } from "@/types";
 
 export default function TabTwoScreen() {
+  const [stories, setStories] = useState<Story[]>([]);
+
+  const { getStories } = useAIStory();
+  const router = useRouter();
+
+  useEffect(() => {
+    getStories().then((stories) => setStories(stories));
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Selma's stories</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
-    </View>
+    <CreatedStoriesList
+      stories={stories}
+      onItemClick={(storyId) => router.push(`/story/${storyId}`)}
+    />
   );
 }
 
@@ -31,5 +41,10 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderWidth: 1,
   },
 });

@@ -8,7 +8,7 @@ import {
   generateImagePrompt,
 } from "../prompts/storyPrompts";
 
-import { StoryParams, ImageParams } from "@/types";
+import { StoryParams, ImageParams, Story } from "@/types";
 
 export const useAIStory = () => {
   const [story, setStory] = useState<string>("");
@@ -31,6 +31,8 @@ export const useAIStory = () => {
     apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY,
   });
 
+  // function to create a story
+
   const createStory = async (
     amountOfImages: number,
     storyParams: StoryParams,
@@ -49,23 +51,20 @@ export const useAIStory = () => {
         setStory(storyContent);
         console.log("Generated story:", storyContent);
 
-        let imageUrl = "";
+        let imageUrls: string[] = [];
         if (amountOfImages > 0) {
-          // Generate images before uploading the story
-          const urls = await generateImages(
+          imageUrls = await generateImages(
             storyContent,
             amountOfImages,
             imageParams
           );
-          imageUrl = urls[0] || "";
-          setImages(urls);
+          setImages(imageUrls);
         }
 
-        // Upload story content with image URL to Stories table
         await uploadStoryToSupabaseDB(
           storyParams.title,
           storyContent,
-          imageUrl
+          imageUrls
         );
         setStoryLoadingState("success");
       } else {
@@ -77,6 +76,8 @@ export const useAIStory = () => {
     }
   };
 
+  // function to generate images for a story
+
   const generateImages = async (
     story: string,
     numberOfImages: number,
@@ -85,6 +86,8 @@ export const useAIStory = () => {
     setImagesLoadingState("loading");
     try {
       const imageUrls: string[] = [];
+
+      // Generate one image at a time
       for (let i = 0; i < numberOfImages; i++) {
         const imagePrompt = generateImagePrompt(
           story,
@@ -92,16 +95,19 @@ export const useAIStory = () => {
           numberOfImages,
           imageParams || ({} as any)
         );
+
         const response = await client.images.generate({
           model: "dall-e-3",
           prompt: imagePrompt,
-          n: numberOfImages,
+          n: 1,
           size: "1024x1024",
         });
+
         if (response.data[0].url) {
           imageUrls.push(response.data[0].url);
         }
       }
+
       setImagesLoadingState("success");
       return imageUrls;
     } catch (error) {
@@ -111,10 +117,12 @@ export const useAIStory = () => {
     }
   };
 
+  // function to upload story to the database
+
   async function uploadStoryToSupabaseDB(
     title: string,
     content: string,
-    imageUrl: string
+    imageUrls: string[]
   ) {
     const { data, error } = await supabase
       .from("Stories")
@@ -122,7 +130,7 @@ export const useAIStory = () => {
         {
           title: title,
           content: content,
-          image_url: imageUrl,
+          image_urls: imageUrls,
         },
       ])
       .select();
@@ -136,5 +144,38 @@ export const useAIStory = () => {
     }
   }
 
-  return { story, images, createStory, storyLoadingState, imagesLoadingState };
+  // function to get all stories from the database
+
+  const getStories = async (): Promise<Story[] | null> => {
+    const { data, error } = await supabase.from("Stories").select();
+    if (error) {
+      console.log("get stories failed", error);
+      return null;
+    }
+    return data || [];
+  };
+
+  // function to get a single story from the database
+
+  const getStory = async (id: string): Promise<Story | null> => {
+    const { data, error } = await supabase
+      .from("Stories")
+      .select()
+      .eq("id", id);
+    if (error) {
+      console.log("get story failed", error);
+      return null;
+    }
+    return data[0] || null;
+  };
+
+  return {
+    story,
+    images,
+    createStory,
+    getStories,
+    getStory,
+    storyLoadingState,
+    imagesLoadingState,
+  };
 };

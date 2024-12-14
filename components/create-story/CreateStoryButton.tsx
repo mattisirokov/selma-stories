@@ -11,27 +11,27 @@ export default function CreateStoryButton() {
         style={styles.button}
         onPress={() =>
           createStory(
-            1,
+            2,
             {
-              title: "Matti's Adventure",
+              title: "Matti and Selma's Tarina",
               theme: "adventure",
-              mainCharacter: "Matti, a young boy",
-              setting: "a ship sailing to a faraway land",
+              mainCharacter: "Selma and Matti, two young friends",
+              setting: "a far away desert with a lot of sand",
               targetAge: 5,
-              moral: "Learn to be patient",
+              moral: "It's always good to learn TypeScript",
               length: "medium",
-              language: "English",
+              language: "Finnish",
             },
             {
               artStyle: "watercolor",
               colorScheme: "bright and cheerful",
               mood: "warm and friendly",
-              focusElement: "Matti's face",
+              focusElement: "Matti and Selma",
             }
           )
         }
       >
-        <Text style={styles.text}>Create Story</Text>
+        <Text style={styles.text}>Create a new story</Text>
       </TouchableOpacity>
     </View>
   );
@@ -42,6 +42,9 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     padding: 10,
     borderRadius: 5,
+    width: "50%",
+    alignSelf: "center",
+    marginTop: 20,
   },
   text: {
     color: "white",

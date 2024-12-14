@@ -33,3 +33,11 @@ export interface ImageParams {
   mood: string;
   focusElement: string;
 }
+
+export interface Story {
+  id: number;
+  created_at: string;
+  title: string;
+  content: string;
+  image_urls: string[];
+}
