@@ -9,9 +9,9 @@ import CreateStoryStep from "@/components/create-story/CreateStoryStep";
 import OptionPicker from "@/components/create-story/OptionPicker";
 import NumberSelector from "@/components/create-story/AmountSelector";
 import StoryCreationSummary from "@/components/create-story/StoryCreationSummary";
-
-import { FormState } from "@/types";
 import LoadingStory from "@/components/create-story/LoadingStory";
+
+import { ArtStyle, FormState, StoryTheme } from "@/types";
 
 export default function CreateStory() {
   const [step, setStep] = useState<number>(1);
@@ -24,14 +24,34 @@ export default function CreateStory() {
     moral: "",
     setting: "",
     amountOfImages: 0,
-    imageStyle: [""],
+    imageStyle: "",
   } as FormState);
 
   const { createStory, storyLoadingState, imagesLoadingState } = useAIStory();
 
+  const resetFormState = () => {
+    setFormState({
+      title: "",
+      mainCharacter: "",
+      mainCharacterTraits: [""],
+      theme: [""],
+      moral: "",
+      setting: "",
+      amountOfImages: 0,
+      imageStyle: "",
+    });
+  };
+
   switch (step) {
     case 1:
-      return <CreateStoryStartScreen onPress={() => setStep(2)} />;
+      return (
+        <CreateStoryStartScreen
+          onPress={() => {
+            setStep(2);
+            resetFormState();
+          }}
+        />
+      );
     case 2:
       return (
         <CreateStoryStep
@@ -182,10 +202,10 @@ export default function CreateStory() {
                   "Pencil",
                   "Anime",
                 ]}
-                selectedOptions={formState.imageStyle}
+                selectedOptions={[formState.imageStyle]}
                 isSingleSelect={true}
                 onSelect={(imageStyle) =>
-                  setFormState({ ...formState, imageStyle: imageStyle })
+                  setFormState({ ...formState, imageStyle: imageStyle[0] })
                 }
               />
             )}
@@ -196,7 +216,28 @@ export default function CreateStory() {
       return (
         <CreateStoryStep
           step={step}
-          onPress={() => setStep(8)}
+          onPress={() => {
+            setStep(8);
+            createStory(
+              formState.amountOfImages,
+              {
+                title: formState.title,
+                theme: formState.theme[0] as StoryTheme,
+                mainCharacter: formState.mainCharacter,
+                setting: formState.setting,
+                targetAge: 5,
+                moral: formState.moral,
+                length: "medium",
+                language: "Finnish",
+              },
+              {
+                artStyle: formState.imageStyle as ArtStyle,
+                colorScheme: "bright and cheerful",
+                mood: "warm and friendly",
+                focusElement: formState.mainCharacter,
+              }
+            );
+          }}
           onBackPress={() => setStep(6)}
           title={`Excellent, this is the story we'll create!`}
           helpText={`You can always change the story details later.`}
@@ -206,9 +247,7 @@ export default function CreateStory() {
             formState.mainCharacter.length === 0 ||
             formState.mainCharacterTraits.length === 0 ||
             formState.theme.length === 0 ||
-            formState.setting.length === 0 ||
-            formState.amountOfImages === 0 ||
-            formState.imageStyle.length === 0
+            formState.setting.length === 0
           }
         >
           <StoryCreationSummary
@@ -218,6 +257,14 @@ export default function CreateStory() {
         </CreateStoryStep>
       );
     case 8:
-      return <LoadingStory />;
+      return (
+        <LoadingStory
+          storyLoadingState={storyLoadingState}
+          imagesLoadingState={imagesLoadingState}
+          onResetPress={() => {
+            setStep(1);
+          }}
+        />
+      );
   }
 }

@@ -72,14 +72,18 @@ export default function StoryCreationSummary({
           <Text style={styles.text}>{formData.amountOfImages}</Text>
         </Animated.View>
 
-        <Animated.View
-          style={styles.gridItem}
-          entering={FadeInDown.delay(700).springify()}
-        >
-          <Ionicons name="brush" size={24} color="white" />
-          <Text style={styles.label}>Image Style</Text>
-          <Text style={styles.text}>{formData.imageStyle}</Text>
-        </Animated.View>
+        {formData.amountOfImages > 0 && (
+          <Animated.View
+            style={styles.gridItem}
+            entering={FadeInDown.delay(700).springify()}
+          >
+            <>
+              <Ionicons name="brush" size={24} color="white" />
+              <Text style={styles.label}>Image Style</Text>
+              <Text style={styles.text}>{formData.imageStyle}</Text>
+            </>
+          </Animated.View>
+        )}
       </View>
     </ScrollView>
   );

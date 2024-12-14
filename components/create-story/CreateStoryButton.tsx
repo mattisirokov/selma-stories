@@ -11,7 +11,7 @@ export default function CreateStoryButton() {
         style={styles.button}
         onPress={() =>
           createStory(
-            2,
+            0,
             {
               title: "Matti and Selma's Tarina",
               theme: "adventure",

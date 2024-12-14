@@ -24,7 +24,7 @@ export interface FormState {
   moral: string;
   setting: string;
   amountOfImages: number;
-  imageStyle: string[];
+  imageStyle: string;
 }
 
 export interface StoryParams {

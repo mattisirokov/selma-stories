@@ -1,27 +1,40 @@
-import { useState, useEffect } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
+import { useState, useEffect, useCallback } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  RefreshControl, // Add this import
+} from "react-native";
 import { useRouter } from "expo-router";
 
 import { useAIStory } from "@/hooks/useAIStory";
-
 import Colors from "@/constants/Colors";
-
 import StoryCard from "@/components/my-stories/StoryCard";
 import { Story } from "@/types";
 
 export default function MyStoriesScreen() {
   const [stories, setStories] = useState<Story[]>([]);
-
+  const [refreshing, setRefreshing] = useState(false);
   const { getStories } = useAIStory();
   const router = useRouter();
 
+  const loadStories = useCallback(async () => {
+    const fetchedStories = await getStories();
+    if (fetchedStories) {
+      setStories(fetchedStories);
+    }
+  }, [getStories]);
+
   useEffect(() => {
-    getStories().then((stories) => {
-      if (stories) {
-        setStories(stories);
-      }
-    });
-  }, []);
+    loadStories();
+  }, [loadStories]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadStories();
+    setRefreshing(false);
+  }, [loadStories]);
 
   const handleStoryClick = (storyId: number) => {
     router.push(`/story/${storyId}`);
@@ -33,7 +46,17 @@ export default function MyStoriesScreen() {
 
   return (
     <SafeAreaView style={{ backgroundColor: Colors.light.background }}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[Colors.light.text]}
+            tintColor={Colors.light.text}
+          />
+        }
+      >
         <Text style={styles.title}>Created stories</Text>
         {sortedByDate.map((story, index) => (
           <StoryCard
