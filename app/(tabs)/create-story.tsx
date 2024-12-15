@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { View } from "react-native";
+import { useRouter } from "expo-router";
 
 import { useAIStory } from "@/hooks/useAIStory";
 
@@ -36,6 +37,7 @@ export default function CreateStory() {
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE);
 
   const { createStory, storyLoadingState, imagesLoadingState } = useAIStory();
+  const router = useRouter();
 
   const resetFormState = () => {
     setFormState(INITIAL_FORM_STATE);
@@ -242,6 +244,11 @@ export default function CreateStory() {
         <LoadingStory
           storyLoadingState={storyLoadingState}
           imagesLoadingState={imagesLoadingState}
+          numberOfImages={formState.amountOfImages}
+          onReset={() => {
+            router.push("/my-stories");
+            setStep(1);
+          }}
         />
       );
   }

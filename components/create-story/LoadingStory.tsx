@@ -1,126 +1,85 @@
-import { StyleSheet, Animated, TouchableOpacity } from "react-native";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "expo-router";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+
 import Colors from "@/constants/Colors";
 
 interface LoadingStoryProps {
   storyLoadingState: "idle" | "loading" | "success" | "error";
   imagesLoadingState: "idle" | "loading" | "success" | "error";
+  numberOfImages: number;
+  onReset: () => void;
 }
 
 export default function LoadingStory({
   storyLoadingState,
   imagesLoadingState,
+  numberOfImages,
+  onReset,
 }: LoadingStoryProps) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const textFadeAnim = useRef(new Animated.Value(1)).current;
-  const [displayedText, setDisplayedText] = useState("");
-  const [showButton, setShowButton] = useState(false);
-  const router = useRouter();
-
-  // Helper function to animate text changes
-  const updateLoadingText = (newText: string) => {
-    Animated.sequence([
-      Animated.timing(textFadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(textFadeAnim, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    setTimeout(() => {
-      setDisplayedText(newText);
-    }, 200);
+  // loading states for story
+  const storyRenderingStages = () => {
+    switch (storyLoadingState) {
+      case "idle":
+        return <Text style={styles.text}>Sharpening the pencils...</Text>;
+      case "loading":
+        return <Text style={styles.text}>Writing some more notes...</Text>;
+      case "success":
+        return <Text style={styles.text}>The plot has been created!</Text>;
+      case "error":
+        return <Text style={styles.text}>Oops, something went wrong</Text>;
+      default:
+        return <Text style={styles.text}>Loading...</Text>;
+    }
   };
 
-  useEffect(() => {
-    // Initial fade in
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  useEffect(() => {
-    // Update loading text based on states
-    if (storyLoadingState === "loading") {
-      setShowButton(false);
-      updateLoadingText("Creating your magical story... ✨");
-    } else if (storyLoadingState === "success") {
-      if (imagesLoadingState === "loading") {
-        setShowButton(false);
-        updateLoadingText("Drawing beautiful illustrations... 🎨");
-      } else if (imagesLoadingState === "success") {
-        updateLoadingText("Images created successfully! 🖼️");
-        setTimeout(() => setShowButton(true), 500);
-      } else if (imagesLoadingState === "error") {
-        updateLoadingText(
-          "Couldn't create the images, but your story is ready! 🎯"
+  // loading states for images
+  const imageRenderingStages = () => {
+    switch (imagesLoadingState) {
+      case "idle":
+        return (
+          <Text style={styles.text}>Getting the pain brushed ready...</Text>
         );
-        setTimeout(() => setShowButton(true), 500);
-      } else {
-        updateLoadingText("Story created successfully! 📖");
-        setTimeout(() => setShowButton(true), 500);
-      }
-    } else if (storyLoadingState === "error") {
-      updateLoadingText("Oops! Something went wrong creating the story 😕");
-      setTimeout(() => setShowButton(true), 500);
+      case "loading":
+        return <Text style={styles.text}>Doing some picasso magic...</Text>;
+      case "success":
+        return (
+          <Text style={styles.text}>Voila, the masterpiece is ready!</Text>
+        );
+      case "error":
+        return <Text style={styles.text}>Oops, something went wrong</Text>;
+      default:
+        return <Text style={styles.text}>Loading...</Text>;
     }
-  }, [storyLoadingState, imagesLoadingState]);
-
-  useEffect(() => {
-    if (storyLoadingState === "success" && imagesLoadingState === "success") {
-      setTimeout(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }).start(() => {
-          router.push("/");
-        });
-      }, 1500);
-    }
-
-    if (
-      storyLoadingState === "error" ||
-      (storyLoadingState === "success" && imagesLoadingState === "error")
-    ) {
-      setTimeout(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }).start(() => {
-          router.push("/");
-        });
-      }, 2000);
-    }
-  }, [storyLoadingState, imagesLoadingState]);
+  };
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <Animated.Text style={[styles.text, { opacity: textFadeAnim }]}>
-        {displayedText}
-      </Animated.Text>
-      {showButton && (
-        <TouchableOpacity
-          style={styles.nextButton}
-          onPress={() => {
-            router.push("/my-stories");
-          }}
-        >
-          <Animated.Text style={styles.nextButtonText}>
-            Read Story
-          </Animated.Text>
-        </TouchableOpacity>
-      )}
-    </Animated.View>
+    <View style={styles.container}>
+      <View style={styles.contentContainer}>
+        {numberOfImages > 0 ? (
+          storyLoadingState === "success" &&
+          imagesLoadingState === "success" ? (
+            <>
+              <Text style={styles.text}>Your story and images are ready!</Text>
+              <TouchableOpacity style={styles.button} onPress={onReset}>
+                <Text style={styles.buttonText}>Create Another Story</Text>
+              </TouchableOpacity>
+            </>
+          ) : storyLoadingState !== "success" ? (
+            storyRenderingStages()
+          ) : (
+            imageRenderingStages()
+          )
+        ) : storyLoadingState === "success" ? (
+          <>
+            <Text style={styles.text}>Your story is ready!</Text>
+            <TouchableOpacity style={styles.button} onPress={onReset}>
+              <Text style={styles.buttonText}>Create Another Story</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          storyRenderingStages()
+        )}
+      </View>
+    </View>
   );
 }
 
@@ -131,6 +90,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
+  contentContainer: {
+    height: 150,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   text: {
     fontSize: 24,
     fontWeight: "bold",
@@ -138,17 +102,17 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     color: "white",
   },
-  nextButton: {
-    marginTop: 20,
-    padding: 16,
-    borderRadius: 12,
+  button: {
     backgroundColor: Colors.light.tint,
-    alignItems: "center",
-    width: 200,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginTop: 20,
   },
-  nextButtonText: {
-    fontSize: 15,
-    fontWeight: "500",
-    color: Colors.light.background,
+  buttonText: {
+    color: "black",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
