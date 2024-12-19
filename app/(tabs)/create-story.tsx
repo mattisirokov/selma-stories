@@ -9,6 +9,7 @@ import {
   CHARACTER_TRAITS,
   IMAGE_STYLES,
   STORY_THEMES,
+  STORY_MORALS,
 } from "@/constants/Options";
 
 import TextInput from "@/components/create-story/TextInput";
@@ -19,22 +20,27 @@ import NumberSelector from "@/components/create-story/AmountSelector";
 import StoryCreationSummary from "@/components/create-story/StoryCreationSummary";
 import LoadingStory from "@/components/create-story/LoadingStory";
 
-import { ArtStyle, FormState, StoryTheme } from "@/types";
+import { StoryParams } from "@/types";
+import ToggleSwitch from "@/components/create-story/ToggleSwitch";
 
-const INITIAL_FORM_STATE: FormState = {
+const INITIAL_FORM_STATE: StoryParams = {
   title: "",
   mainCharacter: "",
+  herraMattiAddition: false,
   mainCharacterTraits: [""],
   theme: [""],
   moral: "",
   setting: "",
   amountOfImages: 0,
   imageStyle: "",
+  targetAge: 5, // this can be hard-coded for now
+  length: "medium", // this can be hard-coded for now
+  language: "Finnish", // this can be hard-coded for now
 };
 
 export default function CreateStory() {
   const [step, setStep] = useState<number>(1);
-  const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE);
+  const [formState, setFormState] = useState<StoryParams>(INITIAL_FORM_STATE);
 
   const { createStory, storyLoadingState, imagesLoadingState } = useAIStory();
   const router = useRouter();
@@ -44,21 +50,25 @@ export default function CreateStory() {
   };
 
   const handleCreateStory = () => {
-    setStep(8);
+    setStep(9); // Changed from 8 to 9 to show loading screen
     createStory(
       formState.amountOfImages,
       {
         title: formState.title,
-        theme: formState.theme[0] as StoryTheme,
+        theme: formState.theme,
         mainCharacter: formState.mainCharacter,
+        herraMattiAddition: formState.herraMattiAddition,
+        mainCharacterTraits: formState.mainCharacterTraits,
         setting: formState.setting,
+        amountOfImages: formState.amountOfImages,
+        imageStyle: formState.imageStyle,
         targetAge: 5,
         moral: formState.moral,
         length: "medium",
         language: "Finnish",
       },
       {
-        artStyle: formState.imageStyle as ArtStyle,
+        artStyle: formState.imageStyle,
         colorScheme: "bright and cheerful",
         mood: "warm and friendly",
         focusElement: formState.mainCharacter,
@@ -91,6 +101,13 @@ export default function CreateStory() {
           onChangeText={(text) =>
             setFormState({ ...formState, mainCharacter: text })
           }
+        />
+        <ToggleSwitch
+          value={formState.herraMattiAddition}
+          onChange={(value) =>
+            setFormState({ ...formState, herraMattiAddition: value })
+          }
+          label="Herra Matti to save the day"
         />
       </View>
     </CreateStoryStep>
@@ -128,7 +145,7 @@ export default function CreateStory() {
       onPress={() => setStep(5)}
       onBackPress={() => setStep(3)}
       title="What's the theme of this story?"
-      helpText="The theme is the main idea of the story, and the moral is the message of the story."
+      helpText="The theme is the main idea of the story."
       highlightedText="theme"
       disabledNextButton={formState.theme.length === 0}
     >
@@ -141,11 +158,30 @@ export default function CreateStory() {
     </CreateStoryStep>
   );
 
-  const renderSettingStep = () => (
+  const renderStoryMoralStep = () => (
     <CreateStoryStep
       step={step}
       onPress={() => setStep(6)}
       onBackPress={() => setStep(4)}
+      title="What's the moral of this story?"
+      helpText="This is the lesson that will be taught through the story."
+      highlightedText="moral"
+      disabledNextButton={formState.moral.length === 0}
+    >
+      <OptionPicker
+        options={STORY_MORALS}
+        selectedOptions={[formState.moral]}
+        isSingleSelect={true}
+        onSelect={(moral) => setFormState({ ...formState, moral: moral[0] })}
+      />
+    </CreateStoryStep>
+  );
+
+  const renderSettingStep = () => (
+    <CreateStoryStep
+      step={step}
+      onPress={() => setStep(7)}
+      onBackPress={() => setStep(5)}
       title="What will the setting of this story be?"
       helpText="The setting is the place where the story takes place."
       highlightedText="setting"
@@ -164,8 +200,8 @@ export default function CreateStory() {
   const renderImageStyleStep = () => (
     <CreateStoryStep
       step={step}
-      onPress={() => setStep(7)}
-      onBackPress={() => setStep(5)}
+      onPress={() => setStep(8)}
+      onBackPress={() => setStep(6)}
       title="What will the image style of this story be?"
       helpText="The setting is the place where the story takes place."
       highlightedText="setting"
@@ -186,7 +222,10 @@ export default function CreateStory() {
             selectedOptions={[formState.imageStyle]}
             isSingleSelect={true}
             onSelect={(imageStyle) =>
-              setFormState({ ...formState, imageStyle: imageStyle[0] })
+              setFormState({
+                ...formState,
+                imageStyle: imageStyle[0],
+              })
             }
           />
         )}
@@ -198,7 +237,7 @@ export default function CreateStory() {
     <CreateStoryStep
       step={step}
       onPress={handleCreateStory}
-      onBackPress={() => setStep(6)}
+      onBackPress={() => setStep(7)}
       title="Excellent, this is the story we'll create!"
       helpText="You can always change the story details later."
       highlightedText="Excellent,"
@@ -207,11 +246,12 @@ export default function CreateStory() {
         formState.mainCharacter.length === 0 ||
         formState.mainCharacterTraits.length === 0 ||
         formState.theme.length === 0 ||
+        formState.moral.length === 0 ||
         formState.setting.length === 0
       }
     >
       <StoryCreationSummary
-        onBackPress={() => setStep(6)}
+        onBackPress={() => setStep(7)}
         formData={formState}
       />
     </CreateStoryStep>
@@ -234,12 +274,14 @@ export default function CreateStory() {
     case 4:
       return renderThemeStep();
     case 5:
-      return renderSettingStep();
+      return renderStoryMoralStep();
     case 6:
-      return renderImageStyleStep();
+      return renderSettingStep();
     case 7:
-      return renderSummaryStep();
+      return renderImageStyleStep();
     case 8:
+      return renderSummaryStep();
+    case 9:
       return (
         <LoadingStory
           storyLoadingState={storyLoadingState}

@@ -1,5 +1,11 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+
 import Animated, { FadeInUp, Layout } from "react-native-reanimated";
 
 export default function OptionPicker({
@@ -9,12 +15,12 @@ export default function OptionPicker({
   isSingleSelect,
 }: {
   options: string[];
-  onSelect: (trait: string[]) => void;
+  onSelect: (options: string[]) => void;
   selectedOptions: string[];
   isSingleSelect: boolean;
 }) {
   const toggleOption = (label: string) => {
-    let newSelectedOptions;
+    let newSelectedOptions: string[];
     if (selectedOptions.includes(label)) {
       newSelectedOptions = selectedOptions.filter((option) => option !== label);
     } else {
@@ -28,8 +34,11 @@ export default function OptionPicker({
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Select traits</Text>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.bubblesContainer}>
         {options.map((option, index) => (
           <Animated.View
@@ -56,17 +65,17 @@ export default function OptionPicker({
           </Animated.View>
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
+  container: {
+    paddingTop: 10,
+    height: "100%",
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   bubblesContainer: {
     flexDirection: "row",

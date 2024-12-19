@@ -38,7 +38,7 @@ export default function CreateStoryStartScreen({
           <Text style={styles.title}>
             Create your story{"\n"}with{" "}
             <View style={styles.appName}>
-              <Text style={styles.appNameText}>StoryAI</Text>
+              <Text style={styles.appNameText}>SelmaAI</Text>
             </View>
           </Text>
           <Text style={styles.text}>

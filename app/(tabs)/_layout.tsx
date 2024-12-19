@@ -19,13 +19,15 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors.light.tint,
         headerShown: useClientOnlyValue(false, true),
+        tabBarIconStyle: { marginBottom: 4 },
+        tabBarLabelStyle: { marginTop: 4 },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerShown: false,
         }}
       />
@@ -33,7 +35,9 @@ export default function TabLayout() {
         name="create-story"
         options={{
           title: "Create",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="plus-circle" color={color} />
+          ),
           headerShown: false,
         }}
       />
@@ -41,7 +45,7 @@ export default function TabLayout() {
         name="my-stories"
         options={{
           title: "My stories",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
           headerShown: false,
         }}
       />

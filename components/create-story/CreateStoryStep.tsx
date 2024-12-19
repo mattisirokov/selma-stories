@@ -125,17 +125,15 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginVertical: 24,
   },
   childrenContainer: {
     flex: 1,
-    borderRadius: 12,
     overflow: "scroll",
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 24,
+    marginTop: 12,
   },
   backButton: {
     flex: 1,

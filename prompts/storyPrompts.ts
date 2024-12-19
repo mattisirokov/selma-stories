@@ -5,6 +5,8 @@ export const generateStoryPrompt = (params: StoryParams) => {
     title,
     theme,
     mainCharacter,
+    mainCharacterTraits,
+    herraMattiAddition,
     setting,
     targetAge,
     moral,
@@ -15,13 +17,14 @@ export const generateStoryPrompt = (params: StoryParams) => {
   return `Create a ${length} children's story in ${language} and in that language only, don't return a seperate translation. suitable for ${targetAge}-year-olds with the following specifications:
     - Title: ${title}
     - Theme: ${theme}
-    - Main character should be a ${mainCharacter}
+    - Main character should be ${mainCharacter}, who has the traits: ${mainCharacterTraits}
     - Set in a ${setting}
     ${moral ? `- Include this moral lesson: ${moral}` : ""}
-    - Use simple, engaging language
+    - Use simple, engaging language, make the text easy and fun to read.
     - Include dialogue between characters
     - Create natural breaks for page turns
-    - End with a satisfying conclusion`;
+    - If the ${herraMattiAddition} is true, then make sure to add a twist to the tale: Herra Matti (a 20-something year-old man with a beard and rounded glasses) should save the day and be a hero - how that happend is up to you!
+    - End with a satisfying conclusion, do not include the title or "the end" within the generated story.`;
 };
 
 export const generateImagePrompt = (
