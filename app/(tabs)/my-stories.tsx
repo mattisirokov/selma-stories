@@ -4,19 +4,29 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  RefreshControl, // Add this import
+  RefreshControl,
+  View,
 } from "react-native";
+
+import { useTranslation } from "react-i18next";
+
 import { useRouter } from "expo-router";
 
 import { useAIStory } from "@/hooks/useAIStory";
-import Colors from "@/constants/Colors";
+
 import StoryCard from "@/components/my-stories/StoryCard";
+import LanguageSelector from "@/components/LanguageSelector";
+
+import Colors from "@/constants/Colors";
 import { Story } from "@/types";
 
 export default function MyStoriesScreen() {
   const [stories, setStories] = useState<Story[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+
   const { getStories } = useAIStory();
+
+  const { t } = useTranslation();
   const router = useRouter();
 
   const loadStories = useCallback(async () => {
@@ -57,7 +67,10 @@ export default function MyStoriesScreen() {
           />
         }
       >
-        <Text style={styles.title}>Created stories</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>{t("created-stories")}</Text>
+          <LanguageSelector />
+        </View>
         {sortedByDate.map((story, index) => (
           <StoryCard
             key={story.id || index}
@@ -79,5 +92,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: Colors.light.text,
     marginBottom: 12,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });

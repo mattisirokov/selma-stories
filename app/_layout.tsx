@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import "../locales/i18n";
 
 import * as SplashScreen from "expo-splash-screen";
 import "react-native-reanimated";
@@ -6,7 +7,6 @@ import "react-native-reanimated";
 import { Stack } from "expo-router";
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 
-import { useColorScheme } from "@/components/useColorScheme";
 import { useFonts } from "expo-font";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";

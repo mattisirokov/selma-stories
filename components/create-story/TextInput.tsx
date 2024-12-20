@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, TextInput as RNTextInput } from "react-native";
+import { StyleSheet, Text, TextInput as NativeInput } from "react-native";
 import { KeyboardAvoidingView, Platform } from "react-native";
+
 import Colors from "@/constants/Colors";
 
 type TextInputProps = {
@@ -23,7 +24,7 @@ export default function TextInput({
       style={styles.container}
     >
       <Text style={styles.label}>{label}</Text>
-      <RNTextInput
+      <NativeInput
         style={isLarge ? styles.largeInput : styles.input}
         placeholder={placeholder}
         value={value}

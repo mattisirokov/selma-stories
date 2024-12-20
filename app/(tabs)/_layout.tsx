@@ -3,8 +3,9 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 
 import Colors from "@/constants/Colors";
-import { useColorScheme } from "@/components/useColorScheme";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+
+import { useClientOnlyValue } from "@/hooks/useClientOnlyValue";
+import { useTranslation } from "react-i18next";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -14,6 +15,8 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{
@@ -26,7 +29,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: t("home"),
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerShown: false,
         }}
@@ -34,7 +37,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="create-story"
         options={{
-          title: "Create",
+          title: t("create-story"),
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="plus-circle" color={color} />
           ),
@@ -44,7 +47,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="my-stories"
         options={{
-          title: "My stories",
+          title: t("my-stories"),
           tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
           headerShown: false,
         }}

@@ -19,9 +19,9 @@ import OptionPicker from "@/components/create-story/OptionPicker";
 import NumberSelector from "@/components/create-story/AmountSelector";
 import StoryCreationSummary from "@/components/create-story/StoryCreationSummary";
 import LoadingStory from "@/components/create-story/LoadingStory";
+import ToggleSwitch from "@/components/create-story/ToggleSwitch";
 
 import { StoryParams } from "@/types";
-import ToggleSwitch from "@/components/create-story/ToggleSwitch";
 
 const INITIAL_FORM_STATE: StoryParams = {
   title: "",
@@ -50,7 +50,7 @@ export default function CreateStory() {
   };
 
   const handleCreateStory = () => {
-    setStep(9); // Changed from 8 to 9 to show loading screen
+    setStep(9);
     createStory(
       formState.amountOfImages,
       {
