@@ -10,6 +10,9 @@ import {
 
 import { StoryParams, ImageParams, Story } from "@/types";
 
+// import ReactNativeBlobUtil from "react-native-blob-util";
+// import { Audio } from "expo-av";
+
 export const useAIStory = () => {
   const [story, setStory] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
@@ -24,6 +27,10 @@ export const useAIStory = () => {
   >("idle");
 
   const [storyLoadingState, setStoryLoadingState] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+
+  const [audioLoadingState, setAudioLoadingState] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
 
@@ -117,6 +124,39 @@ export const useAIStory = () => {
     }
   };
 
+  // function to generate audio reading from story content
+
+  const generateAudioReading = async (content: string) => {
+    // setAudioLoadingState("loading");
+    // try {
+    //   const response = await client.audio.speech.create({
+    //     model: "tts-1",
+    //     voice: "alloy",
+    //     input: content,
+    //   });
+    //   // Get the temporary directory path
+    //   const tempPath = `${ReactNativeBlobUtil.fs.dirs.CacheDir}/temp-audio.mp3`;
+    //   // Write the audio buffer to a temporary file
+    //   await ReactNativeBlobUtil.fs.writeFile(
+    //     tempPath,
+    //     // @ts-ignore
+    //     await response.arrayBuffer(),
+    //     "binary"
+    //   );
+    //   // Load and play the audio using Expo's Audio API
+    //   const { sound } = await Audio.Sound.createAsync({
+    //     uri: `file://${tempPath}`,
+    //   });
+    //   await sound.playAsync();
+    //   setAudioLoadingState("success");
+    //   return sound;
+    // } catch (error) {
+    //   setAudioLoadingState("error");
+    //   console.error("Error generating audio:", error);
+    //   return null;
+    // }
+  };
+
   // function to upload story to the database
 
   async function uploadStoryToSupabaseDB(
@@ -177,5 +217,7 @@ export const useAIStory = () => {
     getStory,
     storyLoadingState,
     imagesLoadingState,
+    generateAudioReading,
+    audioLoadingState,
   };
 };

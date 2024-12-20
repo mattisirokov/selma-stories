@@ -33,7 +33,7 @@ export default function Example() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
-  const { getStory } = useAIStory();
+  const { getStory, generateAudioReading, audioLoadingState } = useAIStory();
 
   useEffect(() => {
     const fetchStory = async () => {
@@ -155,7 +155,6 @@ export default function Example() {
               {formatDate(storyData.created_at)}
             </Text>
           </View>
-
           <View style={styles.content}>
             {(() => {
               if (!storyData.image_urls || storyData.image_urls.length === 0) {
@@ -339,5 +338,20 @@ const styles = StyleSheet.create({
     height: 200,
     marginBottom: 20,
     borderRadius: 8,
+  },
+  audioButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.light.tint,
+    padding: 10,
+    borderRadius: 10,
+    marginLeft: 20,
+  },
+  audioButtonDisabled: {
+    opacity: 0.7,
+  },
+  audioButtonText: {
+    color: Colors.light.text,
+    marginLeft: 8,
   },
 });

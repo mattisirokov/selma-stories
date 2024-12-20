@@ -84,7 +84,7 @@ export default function CreateStory() {
       title="Let's give this story a title & main character"
       helpText="This is the title of the story and the main character"
       disabledNextButton={
-        formState.title.length === 0 || formState.mainCharacter.length === 0
+        formState.title === "" || formState.mainCharacter === ""
       }
     >
       <View style={{ width: "100%", flexDirection: "column", gap: 32 }}>
@@ -166,7 +166,7 @@ export default function CreateStory() {
       title="What's the moral of this story?"
       helpText="This is the lesson that will be taught through the story."
       highlightedText="moral"
-      disabledNextButton={formState.moral.length === 0}
+      disabledNextButton={formState.moral === ""}
     >
       <OptionPicker
         options={STORY_MORALS}
