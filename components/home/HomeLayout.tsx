@@ -113,9 +113,6 @@ const styles = StyleSheet.create({
     color: Colors.light.text,
   },
   contentPlaceholder: {
-    borderStyle: "dashed",
-    borderWidth: 4,
-    borderColor: "#bada55",
     flex: 1,
     borderRadius: 8,
   },

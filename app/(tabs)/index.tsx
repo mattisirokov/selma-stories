@@ -1,11 +1,12 @@
 import { View } from "react-native";
 
 import HomeLayout from "@/components/home/HomeLayout";
+import HomeStoryFeed from "@/components/home/HomeStoryFeed";
 
 export default function TabOneScreen() {
   return (
     <HomeLayout>
-      <View></View>
+      <HomeStoryFeed />
     </HomeLayout>
   );
 }

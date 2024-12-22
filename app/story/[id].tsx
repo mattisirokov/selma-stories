@@ -18,7 +18,7 @@ import { useAIStory } from "@/hooks/useAIStory";
 import FeatherIcon from "@expo/vector-icons/Feather";
 import Colors from "@/constants/Colors";
 
-import { formatDate } from "@/helpers";
+import { formatDate, displayPlaceholderImage } from "@/helpers";
 import { Story } from "@/types";
 
 const HEADER_OFFSET = 100;
@@ -41,7 +41,7 @@ export default function Example() {
       setStoryData(result);
     };
     fetchStory();
-  }, [id]);
+  }, []);
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -57,6 +57,13 @@ export default function Example() {
   if (!storyData) {
     return <Text style={{ color: Colors.light.text }}>Loading...</Text>;
   }
+
+  const getImageSource = (imageUrl?: string) => {
+    if (displayPlaceholderImage(new Date(storyData.created_at)) || !imageUrl) {
+      return require("@/assets/images/placeholder-image.jpg");
+    }
+    return { uri: imageUrl };
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.light.background }}>
@@ -83,16 +90,6 @@ export default function Example() {
                 <FeatherIcon color={Colors.light.text} name="share" size={22} />
               </View>
             </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => {}}>
-              <View style={styles.action}>
-                <FeatherIcon
-                  color={Colors.light.text}
-                  name="search"
-                  size={22}
-                />
-              </View>
-            </TouchableOpacity>
           </View>
         </SafeAreaView>
       </Animated.View>
@@ -117,11 +114,7 @@ export default function Example() {
           <Image
             alt=""
             style={styles.heroImg}
-            source={
-              storyData.image_urls && storyData.image_urls.length > 0
-                ? { uri: storyData.image_urls[0] }
-                : require("@/assets/images/placeholder-image.jpg")
-            }
+            source={getImageSource(storyData.image_urls?.[0])}
           />
         </View>
         <View
@@ -132,12 +125,7 @@ export default function Example() {
               {storyData.title}
             </Text>
 
-            <TouchableOpacity
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.headerTopAction}
-            >
+            <TouchableOpacity onPress={() => {}} style={styles.headerTopAction}>
               <FeatherIcon color={Colors.light.text} name="heart" size={22} />
             </TouchableOpacity>
           </View>
@@ -161,40 +149,9 @@ export default function Example() {
                     {storyData.content}
                   </Text>
                 );
-              } else if (storyData.image_urls.length >= 2) {
-                const midPoint = Math.floor(storyData.content.length / 2);
-                const firstHalf = storyData.content.substring(0, midPoint);
-
-                const lastPeriodInFirst = firstHalf.lastIndexOf(".");
-                const splitPoint =
-                  lastPeriodInFirst !== -1 ? lastPeriodInFirst + 1 : midPoint;
-
-                return (
-                  <>
-                    <Text
-                      style={[styles.storyText, { color: Colors.light.text }]}
-                    >
-                      {storyData.content.substring(0, splitPoint)}
-                    </Text>
-                    <Image
-                      source={{ uri: storyData.image_urls[0] }}
-                      style={styles.storyImage}
-                    />
-                    <Text
-                      style={[styles.storyText, { color: Colors.light.text }]}
-                    >
-                      {storyData.content.substring(splitPoint)}
-                    </Text>
-                    <Image
-                      source={{ uri: storyData.image_urls[1] }}
-                      style={styles.storyImage}
-                    />
-                  </>
-                );
               } else {
                 const midPoint = Math.floor(storyData.content.length / 2);
                 const firstHalf = storyData.content.substring(0, midPoint);
-
                 const lastPeriodInFirst = firstHalf.lastIndexOf(".");
                 const splitPoint =
                   lastPeriodInFirst !== -1 ? lastPeriodInFirst + 1 : midPoint;
@@ -207,14 +164,22 @@ export default function Example() {
                       {storyData.content.substring(0, splitPoint)}
                     </Text>
                     <Image
-                      source={{ uri: storyData.image_urls[0] }}
+                      alt=""
                       style={styles.storyImage}
+                      source={getImageSource(storyData.image_urls[0])}
                     />
                     <Text
                       style={[styles.storyText, { color: Colors.light.text }]}
                     >
                       {storyData.content.substring(splitPoint)}
                     </Text>
+                    {storyData.image_urls.length >= 2 && (
+                      <Image
+                        alt=""
+                        source={getImageSource(storyData.image_urls[1])}
+                        style={styles.storyImage}
+                      />
+                    )}
                   </>
                 );
               }
