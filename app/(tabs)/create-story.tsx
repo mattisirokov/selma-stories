@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { useRouter } from "expo-router";
 
 import { useTranslation } from "react-i18next";
-import { useAIStory } from "@/hooks/useAIStory";
+import { useStories } from "@/contexts/StoryContext";
 
 import {
   CHARACTER_TRAITS,
@@ -43,7 +43,7 @@ export default function CreateStory() {
   const [step, setStep] = useState<number>(1);
   const [formState, setFormState] = useState<StoryParams>(INITIAL_FORM_STATE);
 
-  const { createStory, storyLoadingState, imagesLoadingState } = useAIStory();
+  const { createStory, storyLoadingState, imagesLoadingState } = useStories();
 
   const { t } = useTranslation();
   const router = useRouter();

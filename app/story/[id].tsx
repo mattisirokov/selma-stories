@@ -13,7 +13,8 @@ import {
 } from "react-native";
 
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useAIStory } from "@/hooks/useAIStory";
+
+import { useStories } from "@/contexts/StoryContext";
 
 import FeatherIcon from "@expo/vector-icons/Feather";
 import Colors from "@/constants/Colors";
@@ -33,15 +34,15 @@ export default function Example() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
-  const { getStory, generateAudioReading, audioLoadingState } = useAIStory();
+  const { stories } = useStories();
 
   useEffect(() => {
     const fetchStory = async () => {
-      const result = await getStory(id as string);
-      setStoryData(result);
+      const story = stories.find((s) => s.id === Number(id));
+      setStoryData(story || null);
     };
     fetchStory();
-  }, []);
+  }, [id, stories]);
 
   const scrollY = useRef(new Animated.Value(0)).current;
 

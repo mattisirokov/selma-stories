@@ -1,75 +1,37 @@
 import React, { useMemo } from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  View,
-  TouchableOpacity,
-  Text,
-  Image,
-} from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView, View } from "react-native";
 
-import { formatDate, displayPlaceholderImage } from "@/helpers";
-
+import SmallCard from "../my-stories/SmallCard";
 import Colors from "@/constants/Colors";
 
-import { feed } from "@/constants/placeholder-data";
+import { Story } from "@/types";
 
-export default function HomeStoryFeed() {
+interface HomeStoryFeedProps {
+  stories: Story[];
+}
+
+export default function HomeStoryFeed({ stories }: HomeStoryFeedProps) {
   const rows = useMemo(() => {
-    const rows = [];
+    const sortedStories = [...stories].sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
 
-    for (let i = 0; i < feed.length; i += 2) {
-      rows.push(feed.slice(i, i + 2));
+    const rows = [];
+    for (let i = 0; i < sortedStories.length; i += 2) {
+      rows.push(sortedStories.slice(i, i + 2));
     }
 
     return rows;
-  }, []);
+  }, [stories]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "transparent" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.content}>
         {rows.map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
-            {row.map(({ img, title, author, authorImg, tag, date }, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {}}
-                  style={styles.card}
-                >
-                  <View style={styles.cardTag}>
-                    <Text style={styles.cardTagText}>{tag}</Text>
-                  </View>
-
-                  <Image
-                    alt=""
-                    resizeMode="cover"
-                    source={{ uri: img }}
-                    style={styles.cardImg}
-                  />
-
-                  <View style={styles.cardRow}>
-                    <View style={styles.cardRowItem}>
-                      <Image
-                        alt=""
-                        source={{ uri: authorImg }}
-                        style={styles.cardRowItemImg}
-                      />
-
-                      <Text style={styles.cardRowItemText}>{author}</Text>
-                    </View>
-
-                    <Text style={styles.cardRowDivider}>·</Text>
-
-                    <View style={styles.cardRowItem}>
-                      <Text style={styles.cardRowItemText}>{date}</Text>
-                    </View>
-                  </View>
-
-                  <Text style={styles.cardTitle}>{title}</Text>
-                </TouchableOpacity>
-              );
+            {row.map((story) => {
+              return <SmallCard key={story.id} story={story} />;
             })}
           </View>
         ))}
@@ -91,29 +53,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
   },
-  /** Header */
-  header: {
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
-  headerTop: {
-    marginHorizontal: -6,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  headerAction: {
-    width: 40,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#1d1d1d",
-  },
-  /** Card */
   card: {
     position: "relative",
     flexGrow: 1,
@@ -125,23 +64,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 16,
     backgroundColor: "#222",
-  },
-  cardTag: {
-    position: "absolute",
-    top: 5,
-    right: 5,
-    zIndex: 1,
-    backgroundColor: Colors.light.background,
-    borderTopRightRadius: 7,
-    borderBottomLeftRadius: 4,
-    paddingHorizontal: 8,
-  },
-  cardTagText: {
-    fontSize: 12,
-    lineHeight: 20,
-    fontWeight: "700",
-    color: Colors.light.tint,
-    textTransform: "capitalize",
   },
   cardImg: {
     width: "100%",
@@ -155,35 +77,21 @@ const styles = StyleSheet.create({
     marginTop: 8,
     flexDirection: "row",
     alignItems: "center",
-    flexWrap: "wrap",
   },
   cardRowItem: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    borderRightWidth: 1,
-    borderColor: "transparent",
-  },
-  cardRowItemImg: {
-    width: 22,
-    height: 22,
-    borderRadius: 9999,
-    marginRight: 6,
   },
   cardRowItemText: {
     fontWeight: "400",
     fontSize: 13,
     color: "#888",
-  },
-  cardRowDivider: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "#888",
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
   },
   cardTitle: {
     marginTop: 4,
     fontWeight: "700",
+    paddingHorizontal: 8,
     fontSize: 15,
     lineHeight: 19,
     color: Colors.light.text,

@@ -5,7 +5,9 @@ import * as SplashScreen from "expo-splash-screen";
 import "react-native-reanimated";
 
 import { Stack } from "expo-router";
+
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
+import { StoriesProvider } from "@/contexts/StoryContext";
 
 import { useFonts } from "expo-font";
 
@@ -46,17 +48,19 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <ThemeProvider value={DarkTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="story/[id]"
-          options={{
-            headerShown: false,
-            headerBackTitle: "Back",
-            headerTitle: "Story",
-          }}
-        />
-      </Stack>
+      <StoriesProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="story/[id]"
+            options={{
+              headerShown: false,
+              headerBackTitle: "Back",
+              headerTitle: "Story",
+            }}
+          />
+        </Stack>
+      </StoriesProvider>
     </ThemeProvider>
   );
 }
