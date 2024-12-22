@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
+import { useTranslation } from "react-i18next";
+
 import Colors from "@/constants/Colors";
 
 type CreateStoryStartScreenProps = {
@@ -18,6 +20,8 @@ type CreateStoryStartScreenProps = {
 export default function CreateStoryStartScreen({
   onPress,
 }: CreateStoryStartScreenProps) {
+  const { t } = useTranslation();
+
   return (
     <SafeAreaView style={styles.container}>
       <Animated.View
@@ -36,14 +40,16 @@ export default function CreateStoryStartScreen({
           entering={FadeInDown.delay(400).springify()}
         >
           <Text style={styles.title}>
-            Create your story{"\n"}with{" "}
+            {t("create-story-starter-screen-header")}
+            {"\n"}with{" "}
             <View style={styles.appName}>
-              <Text style={styles.appNameText}>SelmaAI</Text>
+              <Text style={styles.appNameText}>
+                {t("create-story-starter-screen-highlight")}
+              </Text>
             </View>
           </Text>
           <Text style={styles.text}>
-            Generate unique stories powered by AI. Create memorable tales for
-            any occasion.
+            {t("create-story-starter-screen-long-text")}
           </Text>
         </Animated.View>
 
@@ -54,7 +60,9 @@ export default function CreateStoryStartScreen({
             }}
           >
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Create Story</Text>
+              <Text style={styles.buttonText}>
+                {t("create-story-starter-screen-cta")}
+              </Text>
             </View>
           </TouchableOpacity>
         </Animated.View>

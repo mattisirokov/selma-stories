@@ -3,10 +3,12 @@ import {
   SafeAreaView,
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   Image,
 } from "react-native";
+
+import { useTranslation } from "react-i18next";
+import { useRouter } from "expo-router";
 
 import Colors from "@/constants/Colors";
 import FeatherIcon from "@expo/vector-icons/Feather";
@@ -16,6 +18,9 @@ export default function HomeLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { t } = useTranslation();
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.top}>
@@ -35,33 +40,15 @@ export default function HomeLayout({
           </TouchableOpacity>
         </View>
         <View style={styles.greeting}>
-          <Text style={styles.greetingTitle}>Hello, Selma!</Text>
-          <Text style={styles.greetingText}>You have 3 lectures today</Text>
-        </View>
-        <View style={styles.search}>
-          <TextInput
-            placeholder="Search"
-            placeholderTextColor="#9695b0"
-            style={styles.searchInput}
-          />
-          <View style={styles.searchFloating}>
-            <TouchableOpacity>
-              <View style={styles.searchButton}>
-                <FeatherIcon
-                  name="search"
-                  size={20}
-                  color={Colors.light.text}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.greetingTitle}>{t("welcome")}, Selma!</Text>
+          <Text style={styles.greetingText}>{t("welcome-long-text")}</Text>
         </View>
       </View>
       <View style={styles.content}>
         <View style={styles.contentHeader}>
-          <Text style={styles.contentTitle}>Created stories</Text>
-          <TouchableOpacity>
-            <Text style={styles.contentLink}>Create a story</Text>
+          <Text style={styles.contentTitle}>{t("welcome-page-header")}</Text>
+          <TouchableOpacity onPress={() => router.push("/(tabs)/create-story")}>
+            <Text style={styles.contentLink}>{t("welcome-page-cta")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.contentPlaceholder}>{children}</View>
@@ -89,12 +76,9 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 9999,
   },
-  /** Greeting */
   greeting: {
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(255,255,255,0.15)",
-    marginBottom: 12,
+    marginBottom: 6,
   },
   greetingTitle: {
     fontSize: 32,
@@ -107,37 +91,6 @@ const styles = StyleSheet.create({
     color: Colors.light.text,
     marginTop: 8,
   },
-  /** Search */
-  search: {
-    position: "relative",
-  },
-  searchInput: {
-    height: 56,
-    backgroundColor: "#f3f3f6",
-    paddingHorizontal: 16,
-    color: Colors.light.text,
-    fontSize: 18,
-    borderRadius: 9999,
-  },
-  searchFloating: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    height: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 8,
-  },
-  searchButton: {
-    alignSelf: "center",
-    width: 44,
-    height: 44,
-    borderRadius: 9999,
-    backgroundColor: Colors.light.tint,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  /** Content */
   content: {
     paddingVertical: 8,
     paddingHorizontal: 22,

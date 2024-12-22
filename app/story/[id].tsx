@@ -123,10 +123,6 @@ export default function Example() {
                 : require("@/assets/images/placeholder-image.jpg")
             }
           />
-
-          <View style={styles.heroStatus}>
-            <Text style={styles.heroStatusText}>Opened</Text>
-          </View>
         </View>
         <View
           style={[styles.header, { backgroundColor: Colors.light.background }]}
@@ -278,22 +274,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 275,
   },
-  heroStatus: {
-    position: "absolute",
-    bottom: 24,
-    right: 24,
-    paddingVertical: 4,
-    paddingHorizontal: 12,
-    backgroundColor: "#ff9801",
-    borderRadius: 50,
-  },
-  heroStatusText: {
-    fontSize: 14,
-    lineHeight: 18,
-    fontWeight: "600",
-    letterSpacing: 0.1,
-    color: Colors.light.text,
-  },
   header: {
     paddingVertical: 16,
     paddingHorizontal: 20,
@@ -338,20 +318,5 @@ const styles = StyleSheet.create({
     height: 200,
     marginBottom: 20,
     borderRadius: 8,
-  },
-  audioButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.light.tint,
-    padding: 10,
-    borderRadius: 10,
-    marginLeft: 20,
-  },
-  audioButtonDisabled: {
-    opacity: 0.7,
-  },
-  audioButtonText: {
-    color: Colors.light.text,
-    marginLeft: 8,
   },
 });

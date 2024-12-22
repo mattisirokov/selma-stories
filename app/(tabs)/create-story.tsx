@@ -3,6 +3,7 @@ import { useState } from "react";
 import { View } from "react-native";
 import { useRouter } from "expo-router";
 
+import { useTranslation } from "react-i18next";
 import { useAIStory } from "@/hooks/useAIStory";
 
 import {
@@ -43,6 +44,8 @@ export default function CreateStory() {
   const [formState, setFormState] = useState<StoryParams>(INITIAL_FORM_STATE);
 
   const { createStory, storyLoadingState, imagesLoadingState } = useAIStory();
+
+  const { t } = useTranslation();
   const router = useRouter();
 
   const resetFormState = () => {
@@ -81,22 +84,22 @@ export default function CreateStory() {
       step={step}
       onPress={() => setStep(3)}
       onBackPress={() => setStep(1)}
-      title="Let's give this story a title & main character"
-      helpText="This is the title of the story and the main character"
+      title={t("give-title-and-character")}
+      helpText={t("give-title-and-character-description")}
       disabledNextButton={
         formState.title === "" || formState.mainCharacter === ""
       }
     >
       <View style={{ width: "100%", flexDirection: "column", gap: 32 }}>
         <TextInput
-          label="Title of the "
-          placeholder="An adventure in the jungle"
+          label={t("title-of-the-story")}
+          placeholder={t("title-of-the-story-placeholder")}
           value={formState.title}
           onChangeText={(text) => setFormState({ ...formState, title: text })}
         />
         <TextInput
-          label="Main character"
-          placeholder="Selma Sankari"
+          label={t("main-character")}
+          placeholder={t("main-character-placeholder")}
           value={formState.mainCharacter}
           onChangeText={(text) =>
             setFormState({ ...formState, mainCharacter: text })
@@ -107,7 +110,7 @@ export default function CreateStory() {
           onChange={(value) =>
             setFormState({ ...formState, herraMattiAddition: value })
           }
-          label="Herra Matti to save the day"
+          label={t("herra-matti-to-save-the-day")}
         />
       </View>
     </CreateStoryStep>
@@ -118,10 +121,8 @@ export default function CreateStory() {
       step={step}
       onPress={() => setStep(4)}
       onBackPress={() => setStep(2)}
-      title={`What is ${formState.mainCharacter} like in this story?`}
-      helpText={`Based on this, ${
-        formState.mainCharacter
-      } will act accordingly in: ${formState.title.toLowerCase()} story!`}
+      title={`${t("character-traits-step-header")} ${formState.mainCharacter}`}
+      helpText={t("character-traits-step-long-text")}
       highlightedText={formState.mainCharacter}
       disabledNextButton={formState.mainCharacterTraits.length === 0}
     >
@@ -144,8 +145,8 @@ export default function CreateStory() {
       step={step}
       onPress={() => setStep(5)}
       onBackPress={() => setStep(3)}
-      title="What's the theme of this story?"
-      helpText="The theme is the main idea of the story."
+      title={t("theme-step-header")}
+      helpText={t("theme-step-long-text")}
       highlightedText="theme"
       disabledNextButton={formState.theme.length === 0}
     >
@@ -163,10 +164,10 @@ export default function CreateStory() {
       step={step}
       onPress={() => setStep(6)}
       onBackPress={() => setStep(4)}
-      title="What's the moral of this story?"
-      helpText="This is the lesson that will be taught through the story."
+      title={t("moral-step-header")}
+      helpText={t("moral-step-long-text")}
       highlightedText="moral"
-      disabledNextButton={formState.moral === ""}
+      disabledNextButton={formState.moral == ""}
     >
       <OptionPicker
         options={STORY_MORALS}
@@ -182,14 +183,14 @@ export default function CreateStory() {
       step={step}
       onPress={() => setStep(7)}
       onBackPress={() => setStep(5)}
-      title="What will the setting of this story be?"
-      helpText="The setting is the place where the story takes place."
+      title={t("setting-step-header")}
+      helpText={t("setting-step-long-text")}
       highlightedText="setting"
       disabledNextButton={formState.setting.length === 0}
     >
       <TextInput
-        label="Setting"
-        placeholder="On a far away island 🌴"
+        label={t("setting-step-label")}
+        placeholder={t("setting-step-placeholder")}
         value={formState.setting}
         isLarge={true}
         onChangeText={(text) => setFormState({ ...formState, setting: text })}
@@ -202,9 +203,9 @@ export default function CreateStory() {
       step={step}
       onPress={() => setStep(8)}
       onBackPress={() => setStep(6)}
-      title="What will the image style of this story be?"
-      helpText="The setting is the place where the story takes place."
-      highlightedText="setting"
+      title={t("image-step-header")}
+      helpText={t("image-step-long-text")}
+      highlightedText="images,"
       disabledNextButton={formState.setting.length === 0}
     >
       <View>
@@ -238,8 +239,8 @@ export default function CreateStory() {
       step={step}
       onPress={handleCreateStory}
       onBackPress={() => setStep(7)}
-      title="Excellent, this is the story we'll create!"
-      helpText="You can always change the story details later."
+      title={t("summary-step-header")}
+      helpText={t("summary-step-long-text")}
       highlightedText="Excellent,"
       disabledNextButton={
         formState.title.length === 0 ||

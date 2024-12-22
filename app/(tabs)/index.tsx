@@ -1,16 +1,11 @@
-import { Text, StyleSheet } from "react-native";
+import { View } from "react-native";
+
 import HomeLayout from "@/components/home/HomeLayout";
 
 export default function TabOneScreen() {
   return (
     <HomeLayout>
-      <Text style={styles.text}>Welcome to the home page</Text>
+      <View></View>
     </HomeLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  text: {
-    color: "black",
-  },
-});

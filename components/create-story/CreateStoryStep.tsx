@@ -9,6 +9,9 @@ import {
 } from "react-native";
 
 import Animated, { FadeInDown } from "react-native-reanimated";
+
+import { useTranslation } from "react-i18next";
+
 import Colors from "@/constants/Colors";
 
 type CreateStoryStepProps = {
@@ -32,6 +35,8 @@ export default function CreateStoryStep({
   helpText,
   children,
 }: CreateStoryStepProps): JSX.Element {
+  const { t } = useTranslation();
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -68,7 +73,9 @@ export default function CreateStoryStep({
             entering={FadeInDown.delay(600).springify()}
           >
             <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
-              <Text style={styles.backButtonText}>Back</Text>
+              <Text style={styles.backButtonText}>
+                {t("create-story-back")}
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -80,7 +87,9 @@ export default function CreateStoryStep({
               onPress={onPress}
               disabled={disabledNextButton}
             >
-              <Text style={styles.nextButtonText}>Next</Text>
+              <Text style={styles.nextButtonText}>
+                {t("create-story-next")}
+              </Text>
             </TouchableOpacity>
           </Animated.View>
         </View>
